@@ -1,73 +1,115 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# **Cherry-Point**  
+> **정치 진영에 따라 게시글과 댓글을 작성할 수 있는 커뮤니티 플랫폼 서버를 구축하여 사용자가 자신의 정치적 입장을 기반으로 소통하는 프로젝트**
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## **목차**
+1. [실행 환경](#1-실행-환경)  
+   1-1. [로컬 실행](#1-1-로컬-실행)  
+   1-2. [환경 변수](#1-2-환경-변수)  
+2. [기술 스택](#2-기술-스택)  
+3. [디렉토리 구조](#3-디렉토리-구조)  
+4. [기능 구현](#4-기능-구현)  
+   4-1. [회원가입](#4-1-회원가입)
+   4-2. [로그인](#4-2-로그인)  
+   4-3. [로그인](#4-3-비밀번호-찾기)  
+   4-4. [게시글 CRUD](#4-4-게시글-crud)  
+   4-5. [댓글 CRUD](#4-5-댓글-crud)  
+   4-6. [게시글 및 댓글 좋아요/신고](#4-6-게시글-및-댓글-좋아요신고)  
+   4-7. [광고 및 관리자 기능](#4-7-광고-및-관리자-기능)  
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## **1. 실행 환경**
+### **1-2. 환경 변수**  
+- 아래 항목들이 `.env` 파일에 반드시 존재해야 합니다:
+  - `DATABASE_URL`: 데이터베이스 연결 URL
+  - `JWT_SECRET_KEY`: JWT 토큰 서명에 사용될 비밀 키
 
-## Installation
+---
 
+### 기술 스택
+<img src="https://img.shields.io/badge/TypeScript-version 5-3178C6">&nbsp;
+<img src="https://img.shields.io/badge/Nest.js-version 10-E0234E">&nbsp;
+<img src="https://img.shields.io/badge/TypeORM-version 0.3-fcad03">&nbsp;
+<img src="https://img.shields.io/badge/MySQL-version 8-00758F">&nbsp;
+<img src="https://img.shields.io/badge/Prisma-4.0-2D3748">&nbsp;
+
+</br>
+
+---
+
+## 디렉토리 구조
+
+<details>
+<summary><strong>디렉토리 구조</strong></summary>
+<div markdown="1">
+ 
 ```bash
-$ npm install
+─prisma
+├─src
+│  ├─constants
+│  ├─decorators
+│  ├─helper
+│  ├─middle-ware
+│  └─module
+│      ├─admin
+│      ├─advertisement
+│      ├─auth
+│      ├─category
+│      ├─flag
+│      ├─mailgun
+│      ├─political-orientation
+│      ├─posting
+│      ├─prisma
+│      ├─reply
+│      ├─report
+│      ├─upload
+│      ├─user
+│      └─verification-code
+└─test
 ```
+</div>
+</details>
 
-## Running the app
+</br>
 
-```bash
-# development
-$ npm run start
+## 기능구현
+### **4-1. 회원가입** 
+* 회원 가입시 이메일 인증 코드를 보냅니다.
+* 인증 코드 확인 후 중복되는 닉네임 생성을 방지하기 위해 닉네임도 확인 합니다.
+* 정치 진영을 선택합니다.
+  
+### **4-2. 로그인** 
+* 로그인 성공 시 JWT 토큰을 생성합니다.
 
-# watch mode
-$ npm run start:dev
+### **4-3. 비밀번호 찾기**
+* 사용자가 비밀번호를 잊어버렸을 경우 회원 가입 시 사용한 이메일로 인증코드를 보냅니다.
+* 인증 코드 확인 후 비밀번호를 변경합니다.
 
-# production mode
-$ npm run start:prod
-```
+### **4-4. 게시글 CRUD**
+* 로그인 후 게시글 작성, 수정, 삭제 기능 구현
+* 카테고리, 페이지 수, 키워드, 검색 날짜 검색 기능 구현
 
-## Test
+### **4-5. 댓글 CRUD**
+* 로그인 후 게시글에 댓글 등록, 수정, 삭제 기능 구현
 
-```bash
-# unit tests
-$ npm run test
+### **4-6. 게시글 및 댓글 좋아요/신고**
+* 게시글 및 댓글에 좋아요, 싫어요 기능 구현 (중복 시 취소)
 
-# e2e tests
-$ npm run test:e2e
+### **4-7. 광고 및 관리자 기능**
+* 광고 CRUD 기능 구현 (등록, 수정, 삭제)
+* 관리자 로그인 기능 (JWT 토큰 발급)
+* 신고된 게시글 및 댓글 관리 기능
+* 사용자 이용 정지 기능
+* 집회 시 필요 물품 신청서 확인 기능
+* 대시보드(이용자 수, 한 주의 게시글 개수, 한 주의 댓글 개수, 한 주의 이용자 수) 기능
 
-# test coverage
-$ npm run test:cov
-```
+ ---
+ 
+ ## **Swagger 문서**
+API 명세는 Swagger를 통해 확인할 수 있습니다. 아래 링크를 클릭하여 Swagger 문서로 이동하세요.
 
-## Support
+[Swagger 문서 보러 가기](https://github.com/user-attachments/assets/d252816a-68b6-4f10-a368-597e6c476605)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+---
