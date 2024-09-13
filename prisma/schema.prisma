@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model PoliticalOrientation {
+  id                                Int                                 @id @default(autoincrement())
+  name                              String                
+  createdAt                         DateTime                            @default(now())
+  updatedAt                         DateTime                            @default(now()) @updatedAt
+
+  users                             User[]
+  postings                          Posting[]                           @relation("politicalOrientation")
+  postingList                       Posting[]                           @relation("userPoliticalOrientation")
+  replies                           Reply[]
+}
+
+model User {
+  id                                Int                                 @id @default(autoincrement())
+  email                             String                              @unique
+  password                          String
+  nickName                          String                              @unique
+  name                              String?
+  phoneNumber                       String?
+  gender Gender @default(male)
+  address                           String?
+  politicalOrientationId            Int?
+  stopStartDate                     DateTime?
+  stopEndDate                       DateTime?
+  isAdmin                           Boolean                             @default(false)
+  createdAt                         DateTime                            @default(now())
+  updatedAt                         DateTime                            @default(now()) @updatedAt
+  deletedAt                         DateTime?
+
+  politicalOrientation              PoliticalOrientation?               @relation(fields: [politicalOrientationId], references: [id])
+  
+  postings                          Posting[]   
+  replies                           Reply[]
+  userPostLikes                     UserPostLike[]
+  userReplyLikes                    UserReplyLike[]
+  reports                           Report[]
+}
+
+enum Gender {
+  male
+  female
+}
+
+model VerificationCode {
+  id                                Int                                 @id @default(autoincrement())
+  email                             String
+  code                              String                              
+  createdAt                         DateTime                            @default(now())
+  updatedAt                         DateTime                            @default(now()) @updatedAt
+}
+
+model UserLog {  
+  id                                Int                                 @id @default(autoincrement())   
+  ip                                String                              @default("")
+  createdAt                         DateTime                            @default(now())
+  updatedAt                         DateTime                            @default(now()) @updatedAt
+}
+
+model Category {
+  id                                Int                                 @id @default(autoincrement())
+  name                              String
+  onlyAdmin                         Boolean                             @default(false)
+  createdAt                         DateTime                            @default(now())
+  updatedAt                         DateTime                            @default(now()) @updatedAt
+
+  postings                          Posting[]
+}
+
+model Posting {
+  id                                Int                                @id @default(autoincrement())
+  title                             String
+  content                           String                             @db.Text
+  userId                            Int
+  userPoliticalOrientationId        Int?                                 
+  categoryId                        Int
+  hits                              Int                                @default(0)
+  politicalOrientationId            Int
+  isFixed                           Boolean                            @default(false)
+  isDelete                          Boolean                            @default(false)
+  score                             Int                                @default(0)
+  createdAt                         DateTime                           @default(now())
+  updatedAt                         DateTime                           @default(now()) @updatedAt
+
+  user                              User                               @relation(fields: [userId], references: [id])
+  category                          Category                           @relation(fields: [categoryId], references: [id])
+  politicalOrientation              PoliticalOrientation               @relation("politicalOrientation", fields: [politicalOrientationId], references: [id])
+  userPoliticalOrientation          PoliticalOrientation?              @relation("userPoliticalOrientation", fields: [userPoliticalOrientationId], references: [id])
+
+  replies                           Reply[]  
+  userPostLikes                     UserPostLike[]
+  reports                           Report[]    
+}
+
+model Reply {
+  id                                Int                                @id @default(autoincrement())
+  content                           String                             @db.Text
+  userId                            Int
+  userPoliticalOrientationId        Int?                               
+  postingId                         Int                              
+  replyId                           Int?
+  isDelete                          Boolean                            @default(false)                          
+  createdAt                         DateTime                           @default(now())
+  updatedAt                         DateTime                           @default(now()) @updatedAt                         
+
+  user                              User                               @relation(fields: [userId], references: [id])
+  posting                           Posting                            @relation(fields: [postingId], references: [id], onDelete: Cascade) 
+  // comments로 셀프 조인(nullable) 대댓글이 없을 수 있음.
+  reply                             Reply?                             @relation("comments",fields: [replyId],references: [id])
+  userpoliticalOrientation          PoliticalOrientation?              @relation(fields: [userPoliticalOrientationId], references: [id])
+  
+  comments                          Reply[]                            @relation("comments")
+  userReplyLikes                    UserReplyLike[]
+  reports                           Report[]
+}
+
+model Flag {
+  id                                Int                                @id @default(autoincrement())                           
+  purpose                           String
+  name                              String
+  term                              String 
+  numberOfPeople                    Int
+  content                           String
+  materials                         String
+  isPermitted                       String
+  phoneNumber                       String
+  email                             String
+  status                            String                                                      
+  createdAt                         DateTime                           @default(now())
+  updatedAt                         DateTime                           @default(now()) @updatedAt  
+}
+
+model UserPostLike {
+  id                                Int                                @id @default(autoincrement())
+  userId                            Int                                                        
+  postingId                         Int
+  likeType                          String
+  createdAt                         DateTime                           @default(now())
+  updatedAt                         DateTime                           @default(now()) @updatedAt
+
+  user                              User                               @relation(fields: [userId], references: [id])
+  posting                           Posting                            @relation(fields: [postingId], references: [id])  
+}
+
+model UserReplyLike {
+  id                                Int                                @id @default(autoincrement())
+  userId                            Int                                                        
+  replyId                           Int
+  likeType                          String
+  createdAt                         DateTime                           @default(now())
+  updatedAt                         DateTime                           @default(now()) @updatedAt
+
+  user                              User                               @relation(fields: [userId], references: [id])
+  reply                             Reply                              @relation(fields: [replyId], references: [id])  
+}
+
+model Report {
+  id                                Int                                @id @default(autoincrement())
+  userId                            Int
+  postingId                         Int?
+  replyId                           Int?
+  reason                            String  
+  createdAt                         DateTime                           @default(now())
+  updatedAt                         DateTime                           @default(now()) @updatedAt   
+
+  posting                           Posting?                           @relation(fields: [postingId],references: [id])
+  reply                             Reply?                             @relation(fields: [replyId],references: [id])
+  user                              User                               @relation(fields: [userId], references: [id])
+}
+
+model Advertisement {
+  id                                Int                                @id @default(autoincrement())
+  position                          String
+  title                             String
+  link                              String                             @db.Text
+  image                             String
+  createdAt                         DateTime                           @default(now())
+  updatedAt                         DateTime                           @default(now()) @updatedAt   
+}
