@@ -47,28 +47,122 @@
 <div markdown="1">
  
 ```bash
-─prisma
+├─prisma
+│      schema.prisma
+│
 ├─src
+│  │  app.controller.ts
+│  │  app.module.ts
+│  │  app.service.ts
+│  │  main.ts
+│  │
 │  ├─constants
+│  │      frequency.ts
+│  │      millisecond.ts
+│  │      pagination.ts
+│  │      word.ts
+│  │
 │  ├─decorators
+│  │      currentUser.decorator.ts
+│  │
 │  ├─helper
+│  │      exclude.ts
+│  │
 │  ├─middle-ware
+│  │      cookie-parser.middleware.ts
+│  │
 │  └─module
 │      ├─admin
+│      │      admin.controller.ts
+│      │      admin.module.ts
+│      │      type.ts
+│      │
 │      ├─advertisement
+│      │      advertisement.controller.ts
+│      │      advertisement.module.ts
+│      │      advertisement.repository.ts
+│      │      advertisement.service.ts
+│      │
 │      ├─auth
+│      │      admin.guard.ts
+│      │      auth.controller.ts
+│      │      auth.module.ts
+│      │      auth.service.ts
+│      │      jwt-auth.guard.ts
+│      │      jwt.strategy.ts
+│      │      type.ts
+│      │
 │      ├─category
+│      │      category.controller.ts
+│      │      category.module.ts
+│      │      category.repository.ts
+│      │      category.service.ts
+│      │
 │      ├─flag
+│      │      flag.controller.ts
+│      │      flag.module.ts
+│      │      flag.repository.ts
+│      │      flag.service.ts
+│      │      type.ts
+│      │
 │      ├─mailgun
+│      │      mailgun.module.ts
+│      │      mailgun.service.ts
+│      │
 │      ├─political-orientation
+│      │      political-orientation.controller.ts
+│      │      political-orientation.module.ts
+│      │      political-orientation.repository.ts
+│      │      political-orientation.service.ts
+│      │
 │      ├─posting
+│      │      posting.controller.ts
+│      │      posting.module.ts
+│      │      posting.repository.ts
+│      │      posting.service.ts
+│      │      type.ts
+│      │
 │      ├─prisma
+│      │      prisma.module.ts
+│      │      prisma.service.ts
+│      │
 │      ├─reply
+│      │      reply.controller.ts
+│      │      reply.module.ts
+│      │      reply.repository.ts
+│      │      reply.service.ts
+│      │      type.ts
+│      │
 │      ├─report
+│      │      report.controller.ts
+│      │      report.module.ts
+│      │      report.repository.ts
+│      │      report.service.ts
+│      │      type.ts
+│      │
 │      ├─upload
+│      │      upload.controller.ts
+│      │      upload.module.ts
+│      │      upload.service.ts
+│      │
 │      ├─user
+│      │      type.ts
+│      │      user.controller.ts
+│      │      user.module.ts
+│      │      user.repository.ts
+│      │      user.service.ts
+│      │
 │      └─verification-code
+│              verification-code.module.ts
+│              verification-code.repository.ts
+│              verification-code.service.ts
+│
 └─test
+        admin.e2e-spec.ts
+        app.e2e-spec.ts
+        jest-e2e.json
+        reply.e2e-spec.ts
+        user.e2e-spec.ts
 ```
 </div>
 </details>
