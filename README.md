@@ -74,6 +74,13 @@
 
 </br>
 
+## **ERD**
+![ERD 이미지](https://github.com/user-attachments/assets/e893c9f2-93d5-4b40-b0ea-b4687b1bee7a)
+
+</br>
+
+</br>
+
 ## 기능구현
 ### **4-1. 회원가입** 
 * 회원 가입시 이메일 인증 코드를 보냅니다.
